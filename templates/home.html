@@ -1,0 +1,102 @@
+<section class="hero">
+  <img class="app-icon" src="/wizard.webp" fetchpriority="high" alt="Mightty's wizard: a block cursor for a face, with the prompt for eyes" width="128" height="128">
+  <h1 class="wordmark">Mightty</h1>
+  <p class="lede">The fast, lightweight terminal for macOS.</p>
+  <p class="cta">
+    <a class="button" href="https://github.com/mightty-org/mightty/releases/latest/download/Mightty.dmg">Download for macOS</a>
+    <a class="button quiet" href="/docs/install/">Install guide</a>
+  </p>
+  <p class="version">Version {{version}}. Requires macOS 12 or later. Runs on Apple Silicon and Intel. <a href="https://github.com/mightty-org/mightty/releases">All versions</a></p>
+</section>
+
+<section class="feature speed">
+  <h2>Performance</h2>
+  <p>Benchmarked against Ghostty and kitty on the same Mac. Each terminal was launched fresh with its default settings.</p>
+  <div class="table"><table class="versus">
+    <thead><tr><td></td><th scope="col">Mightty</th><th scope="col">Ghostty</th><th scope="col">kitty</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Plain-text throughput</th><td>239 MiB/s</td><td>213 MiB/s</td><td>103 MiB/s</td></tr>
+      <tr><th scope="row">Time to open a window with a shell</th><td>57 ms</td><td>157 ms</td><td>370 ms</td></tr>
+      <tr><th scope="row">Memory at idle</th><td>41 MiB</td><td>72 MiB</td><td>102 MiB</td></tr>
+      <tr><th scope="row">Response time under heavy output</th><td>0.05 ms</td><td>0.20 ms</td><td>4.41 ms</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Medians on an M2 running macOS 15, at 120×40 in Menlo 14, against Ghostty 1.4.0 and kitty 0.49.2. The <a href="/docs/performance/">performance page</a> covers CPU use, typing latency and further throughput tests, and describes the method.</p>
+</section>
+
+<section class="feature agents">
+  <h2>Coding agents</h2>
+  <div class="split">
+    <div>
+      <p>Mightty detects when Claude Code, Codex or another coding agent is waiting for your input. If the agent's pane is not in view, Mightty outlines it in orange, adds it to the count on the Dock icon, and sends a notification when you are in another app. Press <kbd>⌘⇧A</kbd> to go to the pane that has been waiting longest.</p>
+      <p>Agents can also control Mightty through MCP. An agent can open its own panes, run commands in them, and read the output and exit codes. It has no access to your other panes unless you grant it.</p>
+      <p><a href="/docs/agents/">Read about agents and scripting</a></p>
+    </div>
+<pre class="code"><span class="c8"># add Mightty to Claude Code</span>
+claude mcp add mightty -- mightty mcp
+
+<span class="c8"># drive panes from a script</span>
+mightty ctl run --pane 1 -- make test
+mightty ctl spawn --right -- npm run dev
+mightty ctl wait 3 --text "ready"
+mightty ctl attention</pre>
+  </div>
+</section>
+
+<section class="feature windows">
+  <h2>Tabs and splits</h2>
+  <ul class="keys">
+    <li>Press <kbd>⌘T</kbd> to open a tab in the current folder. Drag a tab to reorder it, to move it into its own window, or to move it to another window.</li>
+    <li>Press <kbd>⌘D</kbd> to split a pane to the right, and <kbd>⌘⇧D</kbd> to split it downwards. <kbd>⌘⇧↩</kbd> zooms a pane to fill the window.</li>
+    <li>Press <kbd>⌘Z</kbd> within 5 seconds of closing a tab, pane or window to restore it with its programs still running. After that, <kbd>⌘⇧T</kbd> reopens it with new shells.</li>
+    <li>The command palette (<kbd>⌘⇧P</kbd>) lists every action with its key.</li>
+    <li>The quick terminal slides down from the top of the screen in any app, on a global key that you choose.</li>
+  </ul>
+</section>
+
+<section class="feature settings">
+  <h2>Settings</h2>
+  <div class="split">
+    <div>
+      <p>Press <kbd>⌘,</kbd> to open the settings in a tab. You can search them, values are completed as you type, and themes and fonts are previewed before you choose one.</p>
+      <p>Changes are written to <code>~/.config/mightty/config</code>, and your comments are left in place. Edits saved from any other editor are applied within a second.</p>
+      <p><a href="/docs/settings/">Read about settings</a></p>
+    </div>
+<pre class="code tui"><b> Mightty settings</b>  <span class="c8">~/.config/mightty/config</span>
+
+ <u>Window</u>
+   macos-titlebar-style   <span class="c2">tabs</span>
+   background-opacity     <span class="c2">0.95</span>
+ <span class="sel">  cursor-style           block       </span>
+   window-padding-x       <span class="c2">6</span>
+
+<span class="c8">cursor-style: block, bar, underline or block_hollow</span>
+cursor-style = b<span class="ghost">lock</span>   <span class="c8">→ complete</span></pre>
+  </div>
+</section>
+
+<section class="feature protocols">
+  <h2>Terminal protocols</h2>
+  <ul class="columns">
+    <li><strong>Kitty graphics protocol</strong>, including animation, relative placements and Unicode placeholders. <code>kitten icat</code> plays GIFs.</li>
+    <li><strong>Kitty keyboard protocol</strong>, with all five enhancements.</li>
+    <li><strong>Unicode 17</strong> character widths and grapheme clusters, with mode 2027.</li>
+    <li><strong>OSC 8</strong> hyperlinks, opened with <kbd>⌘</kbd>-click.</li>
+    <li><strong>Styled underlines</strong>: double, curly, dotted and dashed, in any colour (SGR 58).</li>
+    <li><strong>OSC 52</strong> clipboard access. By default, Mightty asks before a program reads the clipboard.</li>
+    <li><strong>OSC 9;4</strong> progress bars, <strong>OSC 22</strong> pointer shapes, <strong>OSC 4, 10–12</strong> colours.</li>
+    <li><strong>OSC 133</strong> shell integration for zsh, bash and fish, without editing your dotfiles.</li>
+  </ul>
+</section>
+
+<section class="feature principles">
+  <h2>How it's built</h2>
+  <p>Mightty is built on Rust's standard library and the frameworks that ship with macOS. It uses no third-party crates and no UI toolkit. The <a href="/docs/architecture/">architecture page</a> describes the design.</p>
+  <dl class="stack">
+    <dt>Windows and input</dt><dd>AppKit, called directly</dd>
+    <dt>Drawing</dt><dd>Metal</dd>
+    <dt>Text</dt><dd>CoreText</dd>
+    <dt>Scripting</dt><dd>JSON-RPC over a Unix socket, and MCP</dd>
+    <dt>Embedding</dt><dd><code>libmightty</code>, the terminal core as a C library with a stable C ABI</dd>
+  </dl>
+</section>

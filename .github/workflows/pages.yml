@@ -1,0 +1,55 @@
+# Builds the site and publishes it to GitHub Pages. The generator needs the
+# app's repository beside this one (its JSON crate and its themes), so both
+# are checked out side by side. data/mightty.json is committed: exporting it
+# needs macOS (scripts/sync.sh).
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: mightty-website
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: mightty-org/mightty
+          path: mightty
+      - id: pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Build
+        working-directory: mightty-website
+        env:
+          # Where Pages serves the site: /mightty-website, or nothing with a custom domain.
+          SITE_BASE: ${{ steps.pages.outputs.base_path }}
+        run: |
+          rustup toolchain install stable --profile minimal
+          cargo test --release
+          cargo run --release
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: mightty-website/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

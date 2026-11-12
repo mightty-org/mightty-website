@@ -1,0 +1,35 @@
+<figure class="layers" aria-label="Mightty's layers, from interfaces at the top to foundations at the bottom">
+  <div class="layer">
+    <p class="layer-name">Interfaces</p>
+    <div class="parts">
+      <div class="part"><b>Mightty.app</b><span>mightty-macos</span></div>
+      <div class="part"><b>mightty ctl</b><span>mightty</span></div>
+      <div class="part"><b>mightty mcp</b><span>mightty-mcp</span></div>
+      <div class="part"><b>libmightty</b><span>mightty-ffi</span></div>
+    </div>
+  </div>
+  <div class="layer">
+    <p class="layer-name">Sessions</p>
+    <div class="parts">
+      <div class="part wide"><b>Multiplexer and control socket</b><span>mightty-mux</span></div>
+    </div>
+  </div>
+  <div class="layer">
+    <p class="layer-name">Terminal core</p>
+    <div class="parts">
+      <div class="part wide"><b>Terminal state</b><span>mightty-term</span></div>
+      <div class="part"><b>Drawing primitives</b><span>mightty-render</span></div>
+      <div class="part"><b>Font rasterizer</b><span>mightty-font</span></div>
+    </div>
+  </div>
+  <div class="layer">
+    <p class="layer-name">Foundations</p>
+    <div class="parts">
+      <div class="part"><b>Parser</b><span>mightty-vt</span></div>
+      <div class="part"><b>Pseudo-terminals</b><span>mightty-pty</span></div>
+      <div class="part"><b>JSON</b><span>mightty-json</span></div>
+      <div class="part"><b>PNG and zlib</b><span>mightty-image</span></div>
+    </div>
+  </div>
+  <figcaption>A crate depends only on crates in its own layer or below.</figcaption>
+</figure>

@@ -1,0 +1,12 @@
+[package]
+name = "mightty-site"
+version = "0.1.0"
+edition = "2024"
+description = "Builds the Mightty website: Markdown pages, the settings reference from the app, the themes"
+publish = false
+
+[dependencies]
+# Mightty's own JSON crate, from the app's repository beside this one.
+mightty-json = { path = "../mightty/crates/mightty-json" }
+
+[workspace]
