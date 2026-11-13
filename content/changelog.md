@@ -3,8 +3,6 @@ title: Changelog
 ---
 # Changelog
 
-What changed in each version, newest first.
-
 ## Version 0.2.0
 
 Released November 12, 2026. [Download Mightty 0.2.0](https://github.com/mightty-org/mightty/releases/download/v0.2.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.2.0) on GitHub.
