@@ -426,7 +426,7 @@ fn download_page(releases: &Value) -> String {
     out += &format!(
         "<p class=\"lede\">Version {version}, released {}. Requires macOS 12 or later, on Apple Silicon or Intel.</p>\n\
          <p class=\"cta\"><a class=\"button\" href=\"{}\">Download Mightty {version}</a><a class=\"button quiet\" href=\"{}\">Release notes</a></p>\n\
-         <p>Open the disk image and drag Mightty to Applications. The <a href=\"/docs/install/\">install guide</a> has the details, including how Mightty updates itself.</p>\n",
+         <p>Open the disk image and drag Mightty to Applications. For more details, refer to the <a href=\"/docs/install/\">install guide</a>.</p>\n",
         long_date(text(latest, "date")),
         file(version, "Mightty.dmg"),
         notes(version),
