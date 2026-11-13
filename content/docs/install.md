@@ -13,8 +13,6 @@ Mightty runs on macOS 12 or later, on Apple Silicon or Intel.
 2. Drag Mightty onto the Applications folder in the window that opens.
 3. Eject the disk image, then open Mightty from Applications. The app is signed and notarized by Apple, so it opens like any other app.
 
-To update, download the app again and replace the old copy.
-
 ### Other versions
 
 The download link above always gives the latest release. Every earlier version stays available on the [releases page](https://github.com/mightty-org/mightty/releases), with its notes and a `SHA256SUMS` file for checking the download. A specific version has a permanent address of this form:
@@ -24,6 +22,25 @@ https://github.com/mightty-org/mightty/releases/download/v0.1.0/Mightty.dmg
 ```
 
 Each release also includes `Mightty.zip`, the same app without the disk image, for scripts.
+
+## Updating
+
+Mightty checks for a new version when it starts and once a day. You can also choose Mightty › **Check for Updates…** at any time.
+
+When a new version is available, click **Install Update**. Mightty downloads it and verifies that it is signed by Mightty's developer and notarized by Apple. It then asks when to install:
+
+- **Install and Restart** installs the update and reopens Mightty. Restarting closes the programs running in Mightty, so it asks first if any are running. Your windows, tabs and splits reopen afterwards.
+- **Install on Quit** leaves everything running and installs the update the next time you quit.
+
+The `auto-update` setting controls the automatic check:
+
+| Value | Effect |
+|---|---|
+| `check` | Tells you when a new version is available. This is the default. |
+| `download` | Also downloads and verifies the new version, then asks when to install it. |
+| `off` | Checks only when you choose Check for Updates. |
+
+Mightty never installs an update or restarts without asking. Version 0.1.0 has no updater: to move on from it, download the latest version as described above and replace the old copy.
 
 ## The `mightty` command
 

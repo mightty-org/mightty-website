@@ -3,9 +3,31 @@ title: Changelog
 ---
 # Changelog
 
-All notable changes to Mightty are listed here, newest first.
+All notable changes to Mightty are listed here, newest first. Every version can be downloaded from the [releases page](https://github.com/mightty-org/mightty/releases).
 
-Version 0.1.0, the first release, was published on November 12, 2026 and includes everything on this page. [Download it](https://github.com/mightty-org/mightty/releases/latest/download/Mightty.dmg), or see [all versions](https://github.com/mightty-org/mightty/releases).
+## Version 0.2.0
+
+Released November 12, 2026.
+
+### Added
+
+- About Mightty, in the app menu and the command palette, shows the version and the licences of Mightty and of the themes and font it includes.
+- Check for Updates, in the app menu and the command palette. Mightty also checks when it starts and once a day.
+- Installing updates in place. Install Update downloads and verifies the new version, then offers Install and Restart or Install on Quit. Mightty never installs or restarts without asking.
+- `auto-update`, with the values `check`, `download` and `off`, controls the automatic check.
+
+### Changed
+
+- Releases are started from a workflow that sets the version, builds, signs and notarizes the app, and publishes the release with notes generated from the merged pull requests.
+
+### Security
+
+- An update is installed only if its checksum matches the release, macOS finds it signed by Mightty's Developer ID team and notarized by Apple, and it is Mightty in the version that was offered. It is verified when it is downloaded and again when it is installed.
+- An update waits to be installed in a folder that only the current user can access, and its archive is inspected before it is unpacked.
+
+## Version 0.1.0
+
+Released November 12, 2026. This was the first release. The sections below list what went into it, by date.
 
 ## November 12, 2026
 
