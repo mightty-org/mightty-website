@@ -16,6 +16,9 @@ python3 -m http.server -d dist 8000   # look at it on http://localhost:8000
   `{{settings}}` or `{{actions}}` is filled with the reference generated from
   `data/mightty.json`, so it always matches the app.
 - `content/changelog.md`: the changelog, written by hand from the commits.
+- `data/releases.json`: the releases on GitHub, with their dates, sizes and
+  checksums, which the download page is built from. `scripts/sync.sh`
+  refreshes it; run it after each release.
 - `static/`: the stylesheet and the script that lets the page wear any of
   Mightty's themes, both put inline in every page (the stylesheet without
   the rules that page doesn't use), and the wizard drawn from the app icon,

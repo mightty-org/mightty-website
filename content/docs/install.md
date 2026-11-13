@@ -15,13 +15,7 @@ Mightty runs on macOS 12 or later, on Apple Silicon or Intel.
 
 ### Other versions
 
-The download link above always gives the latest release. Every earlier version stays available on the [releases page](https://github.com/mightty-org/mightty/releases), with its notes and a `SHA256SUMS` file for checking the download. A specific version has a permanent address of this form:
-
-```
-https://github.com/mightty-org/mightty/releases/download/v0.1.0/Mightty.dmg
-```
-
-Each release also includes `Mightty.zip`, the same app without the disk image, for scripts.
+The link above always gives the latest release. The [download page](/download/) lists every version with its download links, release notes and checksum.
 
 ## Updating
 

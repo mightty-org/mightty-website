@@ -3,11 +3,11 @@ title: Changelog
 ---
 # Changelog
 
-All notable changes to Mightty are listed here, newest first. Every version can be downloaded from the [releases page](https://github.com/mightty-org/mightty/releases).
+This page lists the notable changes in each version of Mightty, newest first. The [download page](/download/) has every version.
 
 ## Version 0.2.0
 
-Released November 12, 2026.
+Released November 12, 2026. [Download Mightty 0.2.0](https://github.com/mightty-org/mightty/releases/download/v0.2.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.2.0) on GitHub.
 
 ### Added
 
@@ -27,7 +27,9 @@ Released November 12, 2026.
 
 ## Version 0.1.0
 
-Released November 12, 2026. This was the first release. The sections below list what went into it, by date.
+Released November 12, 2026. [Download Mightty 0.1.0](https://github.com/mightty-org/mightty/releases/download/v0.1.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.1.0) on GitHub.
+
+Version 0.1.0 was the first release. The sections below list what went into it, by the date each change was made.
 
 ## November 12, 2026
 

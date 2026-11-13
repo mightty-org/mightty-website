@@ -66,6 +66,20 @@ fn main() -> io::Result<()> {
     let home = fs::read_to_string("templates/home.html")?.replace("{{version}}", &escape(&version));
     write(out, "", &layout("Mightty, a terminal emulator for macOS", "Mightty is the fast, lightweight terminal for macOS, written in Rust and drawn with Metal.", "home", &home))?;
 
+    // Download: the latest version, then every earlier one.
+    let releases = fs::read_to_string("data/releases.json")?;
+    let releases = mightty_json::parse(&releases).map_err(|e| io::Error::other(format!("data/releases.json: {e}")))?;
+    write(
+        out,
+        "download",
+        &layout(
+            "Download · Mightty",
+            "Download Mightty for macOS: the latest version and every earlier one, with checksums.",
+            "download",
+            &download_page(&releases),
+        ),
+    )?;
+
     // Docs: an index of them, then each.
     let mut index = String::from("<div class=\"doc-index\">\n<h1>Documentation</h1>\n<p class=\"lede\">The settings and key binding reference is generated from Mightty's source, so it matches the current version.</p>\n<ul class=\"doc-list\">\n");
     for d in &docs {
@@ -350,7 +364,7 @@ try {{
 <a class="skip" href="#main">Skip to content</a>
 <header class="site">
 <a class="brand" href="/"><img src="/wizard-64.webp" alt="" width="32" height="32">Mightty</a>
-<nav aria-label="Main">{home}{docs}{changelog}<a href="https://github.com/mightty-org/mightty">Source</a></nav>
+<nav aria-label="Main">{home}{download}{docs}{changelog}<a href="https://github.com/mightty-org/mightty">Source</a></nav>
 </header>
 <main id="main">
 {body}
@@ -373,6 +387,7 @@ try {{
         title = escape(title),
         description = escape(description),
         home = link("/", "Overview", "home"),
+        download = link("/download/", "Download", "download"),
         docs = link("/docs/", "Docs", "docs"),
         changelog = link("/changelog/", "Changelog", "changelog"),
         css = CSS_HERE,
@@ -392,6 +407,72 @@ fn docs_page(docs: &[Doc], current: Option<&str>, body: &str) -> String {
     }
     nav += "</ul></nav>\n";
     format!("<div class=\"docs\">\n{nav}<article class=\"prose\">\n{body}</article>\n</div>\n")
+}
+
+/// The download page: the latest release first, then a table of them all.
+/// Each file's address is the permanent one of its version.
+fn download_page(releases: &Value) -> String {
+    let empty = Vec::new();
+    let releases = releases.as_array().unwrap_or(&empty);
+    let file = |version: &str, name: &str| format!("https://github.com/mightty-org/mightty/releases/download/v{version}/{name}");
+    let notes = |version: &str| format!("https://github.com/mightty-org/mightty/releases/tag/v{version}");
+    let megabytes = |r: &Value, key: &str| format!("{:.1} MB", r[key].as_u64().unwrap_or(0) as f64 / 1e6);
+    let mut out = String::from("<article class=\"prose download\">\n<h1>Download</h1>\n");
+    let Some(latest) = releases.first() else {
+        out += "<p>There are no releases yet.</p>\n</article>\n";
+        return out;
+    };
+    let version = text(latest, "version");
+    out += &format!(
+        "<p class=\"lede\">Mightty {version} is the latest version, released on {}. It requires macOS 12 or later and runs on Apple Silicon and Intel.</p>\n\
+         <p class=\"cta\"><a class=\"button\" href=\"{}\">Download Mightty {version}</a><a class=\"button quiet\" href=\"{}\">Release notes</a></p>\n\
+         <p class=\"version\">Disk image, {}. Signed and notarized by Apple.</p>\n\
+         <p>Open the disk image and drag Mightty to Applications. The <a href=\"/docs/install/\">install guide</a> has the details, including how Mightty updates itself.</p>\n",
+        long_date(text(latest, "date")),
+        file(version, "Mightty.dmg"),
+        notes(version),
+        megabytes(latest, "dmg"),
+    );
+    out += "<h2 id=\"all-versions\">All versions</h2>\n\
+            <p>Every release stays available at a permanent address. The disk image is the usual download. The zip archive holds the same app, for scripts.</p>\n\
+            <div class=\"table\"><table class=\"files\">\n<tr><th>Version</th><th>Released</th><th>Download</th><th>Notes</th></tr>\n";
+    for r in releases {
+        let version = text(r, "version");
+        out += &format!(
+            "<tr><td>{version}</td><td>{}</td><td><a href=\"{}\">Disk image</a> ({}), <a href=\"{}\">zip</a> ({})</td><td><a href=\"{}\">Release notes</a></td></tr>\n",
+            long_date(text(r, "date")),
+            file(version, "Mightty.dmg"),
+            megabytes(r, "dmg"),
+            file(version, "Mightty.zip"),
+            megabytes(r, "zip"),
+            notes(version),
+        );
+    }
+    out += "</table></div>\n\
+            <p>The <a href=\"/changelog/\">changelog</a> describes what changed in each version.</p>\n\
+            <h2 id=\"verifying\">Verifying a download</h2>\n\
+            <p>Each release includes a <code>SHA256SUMS</code> file. To check a disk image, compare its checksum with the one listed here:</p>\n\
+            <pre><code>shasum -a 256 Mightty.dmg</code></pre>\n\
+            <div class=\"table\"><table>\n<tr><th>Version</th><th>SHA-256 of Mightty.dmg</th></tr>\n";
+    for r in releases {
+        out += &format!("<tr><td>{}</td><td><code>{}</code></td></tr>\n", escape(text(r, "version")), escape(text(r, "sha256")));
+    }
+    out += "</table></div>\n\
+            <p>macOS also checks every download itself: Mightty is signed with a Developer ID and notarized by Apple, and it opens without a warning only if that check passes.</p>\n\
+            </article>\n";
+    out
+}
+
+/// `2026-11-12` as `November 12, 2026`.
+fn long_date(iso: &str) -> String {
+    const MONTHS: [&str; 12] =
+        ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let mut parts = iso.split('-').map(|p| p.parse::<usize>().unwrap_or(0));
+    let (year, month, day) = (parts.next().unwrap_or(0), parts.next().unwrap_or(0), parts.next().unwrap_or(0));
+    match MONTHS.get(month.wrapping_sub(1)) {
+        Some(name) => format!("{name} {day}, {year}"),
+        None => iso.to_owned(),
+    }
 }
 
 fn text<'a>(v: &'a Value, key: &str) -> &'a str {

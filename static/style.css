@@ -225,7 +225,7 @@ button.link, .wearing button {
 }
 
 /* Comparison tables (a label and three terminals): the same columns in each, numbers aligned */
-.prose table:has(tr > :nth-child(4)) :is(th, td):not(:first-child) { width: 7.5em; text-align: right; padding: 9px 0 9px 12px; font-variant-numeric: tabular-nums; }
+.prose table:not(.files):has(tr > :nth-child(4)) :is(th, td):not(:first-child) { width: 7.5em; text-align: right; padding: 9px 0 9px 12px; font-variant-numeric: tabular-nums; }
 .lede-doc, .doc-index .lede { font-size: 19px; color: var(--muted); max-width: 60ch; margin-top: 0; }
 
 .prose ul.doc-list, ul.doc-list { list-style: none; padding: 0; margin: 32px 0 0; }
@@ -252,7 +252,12 @@ table.actions td:nth-child(2) { white-space: nowrap; }
 .pager .next { margin-left: auto; text-align: right; }
 
 /* Changelog */
-.changelog { margin-top: 32px; }
+.changelog, .download { margin-top: 32px; }
+/* The download page's versions: a line each, the links kept together */
+.prose table.files td { white-space: nowrap; }
+@media (max-width: 640px) {
+  .prose table.files td { white-space: normal; }
+}
 .changelog h2 { margin-top: 64px; }
 .changelog h2:first-of-type { margin-top: 32px; }
 
