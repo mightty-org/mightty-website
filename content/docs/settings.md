@@ -5,7 +5,7 @@ order: 3
 ---
 # Settings
 
-Mightty has a settings screen that runs in a terminal tab, and a plain-text config file behind it. You can use either: the screen writes to the file, and Mightty applies the file whenever it changes.
+Settings are kept in a plain-text config file. The settings screen edits that file, and Mightty applies it whenever it changes.
 
 ## The settings screen
 

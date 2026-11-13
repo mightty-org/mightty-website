@@ -5,7 +5,7 @@ order: 2
 ---
 # First steps
 
-Mightty opens a window running your login shell. This page lists the keys you'll use most often. Every action is also available from the menus and from the command palette (<kbd>⌘⇧P</kbd>), and you can change any key in the [key bindings](/docs/keybindings/).
+The keys you'll use most. Each is also in the menus and the command palette (<kbd>⌘⇧P</kbd>), and can be changed in the [key bindings](/docs/keybindings/).
 
 ## Tabs and windows
 
