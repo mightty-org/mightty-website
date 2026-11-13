@@ -424,14 +424,12 @@ fn download_page(releases: &Value) -> String {
     };
     let version = text(latest, "version");
     out += &format!(
-        "<p class=\"lede\">Mightty {version} is the latest version, released on {}. It requires macOS 12 or later and runs on Apple Silicon and Intel.</p>\n\
+        "<p class=\"lede\">Version {version}, released {}. Requires macOS 12 or later, on Apple Silicon or Intel.</p>\n\
          <p class=\"cta\"><a class=\"button\" href=\"{}\">Download Mightty {version}</a><a class=\"button quiet\" href=\"{}\">Release notes</a></p>\n\
-         <p class=\"version\">Disk image, {}. Signed and notarized by Apple.</p>\n\
          <p>Open the disk image and drag Mightty to Applications. The <a href=\"/docs/install/\">install guide</a> has the details, including how Mightty updates itself.</p>\n",
         long_date(text(latest, "date")),
         file(version, "Mightty.dmg"),
         notes(version),
-        megabytes(latest, "dmg"),
     );
     out += "<h2 id=\"all-versions\">All versions</h2>\n\
             <p>Every release stays available at a permanent address. The disk image is the usual download. The zip archive holds the same app, for scripts.</p>\n\
@@ -458,7 +456,6 @@ fn download_page(releases: &Value) -> String {
         out += &format!("<tr><td>{}</td><td><code>{}</code></td></tr>\n", escape(text(r, "version")), escape(text(r, "sha256")));
     }
     out += "</table></div>\n\
-            <p>macOS also checks every download itself: Mightty is signed with a Developer ID and notarized by Apple, and it opens without a warning only if that check passes.</p>\n\
             </article>\n";
     out
 }
