@@ -3,7 +3,7 @@ title: Changelog
 ---
 # Changelog
 
-This page lists the notable changes in each version of Mightty, newest first. The [download page](/download/) has every version.
+What changed in each version, newest first.
 
 ## Version 0.2.0
 
