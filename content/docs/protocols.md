@@ -1,6 +1,7 @@
 ---
 title: Protocols
 summary: The escape sequences Mightty supports beyond VT100 and xterm.
+description: The terminal protocols Mightty supports: kitty graphics and keyboard protocols, Unicode 17, styled underlines, OSC 8 links, OSC 52 and more.
 order: 9
 ---
 # Protocols

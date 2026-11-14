@@ -1,6 +1,7 @@
 ---
 title: Architecture
 summary: How Mightty is put together, and how output gets to the screen.
+description: How Mightty is built: design principles, the layers and crates, threads, data flow from program to screen, and trust boundaries.
 order: 12
 ---
 # Architecture

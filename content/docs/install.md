@@ -1,6 +1,7 @@
 ---
 title: Install
 summary: Download Mightty, or build it from source.
+description: Download and install Mightty, a fast, lightweight terminal for macOS 12 or later, or build it from source. How Mightty updates itself.
 order: 1
 ---
 # Install

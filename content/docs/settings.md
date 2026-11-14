@@ -1,6 +1,7 @@
 ---
 title: Settings
 summary: How to change settings, and what each one does.
+description: How to change Mightty settings in the settings screen or the config file, and a reference of every setting with its default.
 order: 3
 ---
 # Settings

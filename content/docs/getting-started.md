@@ -1,6 +1,7 @@
 ---
 title: First steps
 summary: The keys you will use every day.
+description: The Mightty keyboard shortcuts you will use every day: tabs, windows, splits, search, selection and text size.
 order: 2
 ---
 # First steps

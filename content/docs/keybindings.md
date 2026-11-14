@@ -1,6 +1,7 @@
 ---
 title: Key bindings
 summary: How to change keys, and what each action does.
+description: How to change key bindings in Mightty, including global keys, and a reference of every action and its default key.
 order: 4
 ---
 # Key bindings

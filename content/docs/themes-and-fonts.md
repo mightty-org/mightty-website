@@ -1,6 +1,7 @@
 ---
 title: Themes and fonts
 summary: Choosing a theme and a font.
+description: Choose one of 819 built-in themes or your own, follow the macOS appearance, and set fonts, ligatures and OpenType features in Mightty.
 order: 5
 ---
 # Themes and fonts

@@ -9,8 +9,10 @@
 //! path it is served under when it isn't at a domain's root (`/mightty-website` on
 //! GitHub Pages without a domain of its own); links are made under it.
 
+mod agents;
 mod markdown;
 
+use std::cell::RefCell;
 use std::collections::HashSet;
 use std::fs;
 use std::io;
@@ -25,8 +27,12 @@ struct Doc {
     slug: String,
     title: String,
     summary: String,
+    /// For search results; the summary if it has none.
+    description: String,
     order: u32,
     html: String,
+    /// Its Markdown, as written.
+    markdown: String,
 }
 
 fn main() -> io::Result<()> {
@@ -58,13 +64,20 @@ fn main() -> io::Result<()> {
             html = html.replace("<!--layers-->", &fs::read_to_string("templates/layers.html")?);
         }
         let slug = path.file_stem().unwrap().to_string_lossy().into_owned();
-        docs.push(Doc { slug, title: field("title"), summary: field("summary"), order: field("order").parse().unwrap_or(99), html });
+        let description = Some(field("description")).filter(|d| !d.is_empty()).unwrap_or_else(|| field("summary"));
+        docs.push(Doc { slug, title: field("title"), summary: field("summary"), description, order: field("order").parse().unwrap_or(99), html, markdown: body.to_owned() });
     }
     docs.sort_by_key(|d| d.order);
 
     // Home.
     let home = fs::read_to_string("templates/home.html")?.replace("{{version}}", &escape(&version));
-    write(out, "", &layout("Mightty, a terminal emulator for macOS", "Mightty is the fast, lightweight terminal for macOS, written in Rust and drawn with Metal.", "home", &home))?;
+    const ABOUT: &str = "Mightty is the fast, lightweight terminal for macOS, written in Rust and drawn with Metal, and built to work with coding agents.";
+    write(
+        out,
+        "",
+        &layout("Mightty, a terminal emulator for macOS", ABOUT, "home", &home),
+        Extra { sources: &["templates/home.html", "data/mightty.json"], markdown: None, json_ld: Some(agents::application(&version, ABOUT)) },
+    )?;
 
     // Download: the latest version, then every earlier one.
     let releases = fs::read_to_string("data/releases.json")?;
@@ -78,6 +91,11 @@ fn main() -> io::Result<()> {
             "download",
             &download_page(&releases),
         ),
+        Extra {
+            sources: &["data/releases.json"],
+            markdown: Some(download_markdown(&releases)),
+            json_ld: Some(agents::application(&version, ABOUT)),
+        },
     )?;
 
     // Docs: an index of them, then each.
@@ -86,7 +104,22 @@ fn main() -> io::Result<()> {
         index += &format!("<li><a href=\"/docs/{}/\"><span class=\"doc-title\">{}</span><span class=\"doc-summary\">{}</span></a></li>\n", d.slug, escape(&d.title), inline(&d.summary));
     }
     index += "</ul>\n</div>\n";
-    write(out, "docs", &layout("Documentation · Mightty", "Installing, setting up and using Mightty.", "docs", &docs_page(&docs, None, &index)))?;
+    let mut index_md = String::from("# Mightty documentation\n\n");
+    for d in &docs {
+        index_md += &format!("- [{}](/docs/{}/): {}\n", d.title, d.slug, d.summary);
+    }
+    write(
+        out,
+        "docs",
+        &layout(
+            "Documentation · Mightty",
+            "Documentation for Mightty, the fast, lightweight terminal for macOS: installing, settings, key bindings, agents and more.",
+            "docs",
+            &docs_page(&docs, None, &index),
+        ),
+        Extra { sources: &["content/docs"], markdown: Some(agents::absolute(&index_md)), json_ld: None },
+    )?;
+    let mut entries = Vec::new();
     for (n, d) in docs.iter().enumerate() {
         let mut body = d.html.clone();
         // Where to go next, at the end of each page.
@@ -100,14 +133,36 @@ fn main() -> io::Result<()> {
             body += &format!("<a class=\"next\" href=\"/docs/{}/\"><span>Next</span>{}</a>", p.slug, escape(&p.title));
         }
         body += "</nav>";
-        write(out, &format!("docs/{}", d.slug), &layout(&format!("{} · Mightty", d.title), &d.summary, "docs", &docs_page(&docs, Some(&d.slug), &body)))?;
+        let path = format!("docs/{}", d.slug);
+        let source = format!("content/docs/{}.md", d.slug);
+        // The references are made from the app's export.
+        let sources: Vec<&str> = if d.markdown.contains("{{settings}}") || d.markdown.contains("{{actions}}") { vec![&source, "data/mightty.json"] } else { vec![&source] };
+        let markdown = agents::page(&d.markdown, &data);
+        let modified = agents::modified(&sources);
+        write(
+            out,
+            &path,
+            &layout(&format!("{} · Mightty", d.title), &d.description, "docs", &docs_page(&docs, Some(&d.slug), &body)),
+            Extra { sources: &sources, markdown: Some(markdown.clone()), json_ld: Some(agents::article(&d.title, &d.description, &path, modified.as_deref())) },
+        )?;
+        entries.push((agents::Entry { title: d.title.clone(), summary: d.summary.clone(), path }, markdown));
     }
 
     // Changelog.
     let text = fs::read_to_string("content/changelog.md")?;
     let (_, body) = front_matter(&text);
     let changelog = format!("<article class=\"prose changelog\">\n{}</article>\n", render(body).0);
-    write(out, "changelog", &layout("Changelog · Mightty", "What's new in Mightty.", "changelog", &changelog))?;
+    write(
+        out,
+        "changelog",
+        &layout("Changelog · Mightty", "The changes in each version of Mightty, the fast, lightweight terminal for macOS.", "changelog", &changelog),
+        Extra { sources: &["content/changelog.md"], markdown: Some(agents::page(body, &data)), json_ld: None },
+    )?;
+
+    // For agents: what the site is, and all the docs in one file.
+    let index: Vec<agents::Entry> = entries.iter().map(|(e, _)| agents::Entry { title: e.title.clone(), summary: e.summary.clone(), path: e.path.clone() }).collect();
+    fs::write(out.join("llms.txt"), agents::llms(&version, &index))?;
+    fs::write(out.join("llms-full.txt"), agents::llms_full(&version, &entries))?;
 
     // Static files, but for what every page holds already; and the themes
     // for the page to wear.
@@ -128,25 +183,52 @@ fn main() -> io::Result<()> {
         .lines()
         .filter(|line| !line.contains(URL_HERE))
         .map(|line| format!("{line}\n"))
-        .collect();
+        .collect::<String>()
+        .replace(HEAD_HERE, "<meta name=\"robots\" content=\"noindex\">\n");
     fs::write(out.join("404.html"), based(&lost))?;
-    let mut pages = Vec::new();
-    sitemap(out, "", &mut pages)?;
-    fs::write(
-        out.join("sitemap.xml"),
-        format!("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n{}\n</urlset>\n", pages.join("\n")),
-    )?;
+    fs::write(out.join("sitemap.xml"), sitemap())?;
     println!("built dist/ ({} docs)", docs.len());
     Ok(())
 }
 
-/// Writes `html` as `dir/index.html` under `out`, its site links under `SITE_BASE`.
-fn write(out: &Path, dir: &str, html: &str) -> io::Result<()> {
-    let html = html.replace(URL_HERE, &url_of(dir));
-    let dir = out.join(dir);
-    fs::create_dir_all(&dir)?;
-    fs::write(dir.join("index.html"), based(&html))
+/// What a page has besides its HTML.
+struct Extra<'a> {
+    /// The files it's made from, for the date it last changed.
+    sources: &'a [&'a str],
+    /// The page as Markdown, written beside it as `index.md` for agents.
+    markdown: Option<String>,
+    /// Structured data for its head.
+    json_ld: Option<Value>,
 }
+
+thread_local! {
+    /// The pages written, and the dates they last changed, for the sitemap.
+    static PAGES: RefCell<Vec<(String, Option<String>)>> = const { RefCell::new(Vec::new()) };
+}
+
+/// Writes `html` as `dir/index.html` under `out`, its site links under
+/// `SITE_BASE`, with what `extra` adds; and notes it for the sitemap.
+fn write(out: &Path, dir: &str, html: &str, extra: Extra) -> io::Result<()> {
+    let target = out.join(dir);
+    fs::create_dir_all(&target)?;
+    let mut head = String::new();
+    if let Some(markdown) = &extra.markdown {
+        let path = if dir.is_empty() { "/index.md".to_owned() } else { format!("/{dir}/index.md") };
+        head += &format!("<link rel=\"alternate\" type=\"text/markdown\" href=\"{path}\">\n");
+        fs::write(target.join("index.md"), markdown)?;
+    } else if dir.is_empty() {
+        head += "<link rel=\"alternate\" type=\"text/markdown\" href=\"/llms.txt\">\n";
+    }
+    if let Some(value) = &extra.json_ld {
+        head += &agents::json_ld(value);
+    }
+    let html = html.replace(URL_HERE, &url_of(dir)).replace(HEAD_HERE, &head);
+    PAGES.with_borrow_mut(|pages| pages.push((dir.to_owned(), agents::modified(extra.sources))));
+    fs::write(target.join("index.html"), based(&html))
+}
+
+/// Where a page's own additions to its head go, until it's written.
+const HEAD_HERE: &str = "<!--head-->\n";
 
 /// Where the site is published.
 const SITE_URL: &str = "https://mightty.org";
@@ -166,19 +248,18 @@ fn based(html: &str) -> String {
     html.replace("href=\"/", &format!("href=\"{base}/")).replace("src=\"/", &format!("src=\"{base}/")).replace("<html lang=\"en\">", &format!("<html lang=\"en\" data-base=\"{base}\">"))
 }
 
-/// Every page under `dir` (itself at `path` in the site), as sitemap entries.
-fn sitemap(dir: &Path, path: &str, out: &mut Vec<String>) -> io::Result<()> {
-    if dir.join("index.html").exists() {
-        out.push(format!("<url><loc>{}</loc></url>", url_of(path)));
-    }
-    let mut dirs: Vec<PathBuf> = fs::read_dir(dir)?.filter_map(|e| Some(e.ok()?.path())).filter(|p| p.is_dir()).collect();
-    dirs.sort();
-    for sub in dirs {
-        let name = sub.file_name().unwrap().to_string_lossy().into_owned();
-        let path = if path.is_empty() { name } else { format!("{path}/{name}") };
-        sitemap(&sub, &path, out)?;
-    }
-    Ok(())
+/// The sitemap: every page written, with the date it last changed.
+fn sitemap() -> String {
+    let mut pages = PAGES.with_borrow(Clone::clone);
+    pages.sort();
+    let entries: Vec<String> = pages
+        .iter()
+        .map(|(dir, date)| match date {
+            Some(date) => format!("<url><loc>{}</loc><lastmod>{date}</lastmod></url>", url_of(dir)),
+            None => format!("<url><loc>{}</loc></url>", url_of(dir)),
+        })
+        .collect();
+    format!("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n{}\n</urlset>\n", entries.join("\n"))
 }
 
 /// The stylesheet and script, put in every page rather than linked: one
@@ -341,7 +422,12 @@ fn layout(title: &str, description: &str, current: &str, body: &str) -> String {
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="/*url*/">
-<meta property="og:image" content="https://mightty.org/apple-touch-icon.png">
+<meta property="og:image" content="https://mightty.org/og.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta property="og:image:alt" content="Mightty: the fast, lightweight terminal for macOS">
+<meta name="twitter:card" content="summary_large_image">
+<!--head-->
 <link rel="icon" type="image/png" sizes="32x32" href="/wizard-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>{css}</style>
@@ -457,6 +543,34 @@ fn download_page(releases: &Value) -> String {
     }
     out += "</table></div>\n\
             </article>\n";
+    out
+}
+
+/// The download page as Markdown.
+fn download_markdown(releases: &Value) -> String {
+    let empty = Vec::new();
+    let releases = releases.as_array().unwrap_or(&empty);
+    let base = "https://github.com/mightty-org/mightty/releases";
+    let mut out = String::from("# Download Mightty\n\n");
+    if let Some(latest) = releases.first() {
+        let version = text(latest, "version");
+        out += &format!(
+            "The latest version is {version}, released {}. It requires macOS 12 or later and runs on Apple Silicon and Intel.\n\n\
+             - Disk image: {base}/download/v{version}/Mightty.dmg\n\
+             - Always the latest: {base}/latest/download/Mightty.dmg\n\n\
+             Open the disk image and drag Mightty to Applications. Installing: {SITE_URL}/docs/install/\n\n",
+            long_date(text(latest, "date")),
+        );
+    }
+    out += "## All versions\n\n| Version | Released | Disk image | Zip | SHA-256 of Mightty.dmg |\n|---|---|---|---|---|\n";
+    for r in releases {
+        let v = text(r, "version");
+        out += &format!(
+            "| {v} | {} | {base}/download/v{v}/Mightty.dmg | {base}/download/v{v}/Mightty.zip | `{}` |\n",
+            long_date(text(r, "date")),
+            text(r, "sha256"),
+        );
+    }
     out
 }
 

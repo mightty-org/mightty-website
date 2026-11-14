@@ -1,6 +1,7 @@
 ---
 title: Agents and scripting
 summary: How Mightty tells you an agent is waiting, and how agents and scripts drive it.
+description: How Mightty shows when a coding agent such as Claude Code is waiting for you, and how agents and scripts control it through MCP and mightty ctl.
 order: 7
 ---
 # Agents and scripting

@@ -1,6 +1,7 @@
 ---
 title: Performance
 summary: Mightty against Ghostty and kitty, and how it was measured.
+description: Mightty benchmarked against Ghostty and kitty on macOS: start-up time, memory, throughput, CPU use and latency, and how each was measured.
 order: 11
 ---
 # Performance

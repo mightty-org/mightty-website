@@ -1,6 +1,7 @@
 ---
 title: Tabs and windows
 summary: Moving tabs around, getting closed ones back, and the quick terminal.
+description: Mightty tabs, title bar styles, restoring closed tabs and windows with their programs running, and the quick terminal.
 order: 6
 ---
 # Tabs and windows

@@ -1,6 +1,7 @@
 ---
 title: Command line
 summary: Every mightty command.
+description: Every mightty command: opening windows, the settings screen, mightty ctl, the MCP server and running programs without a window.
 order: 10
 ---
 # Command line

@@ -1,6 +1,7 @@
 ---
 title: Shell integration
 summary: What Mightty learns from your shell.
+description: How Mightty integrates with zsh, bash and fish to mark prompts, commands, output and exit codes, without editing your dotfiles.
 order: 8
 ---
 # Shell integration

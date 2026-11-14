@@ -16,6 +16,10 @@ python3 -m http.server -d dist 8000   # look at it on http://localhost:8000
   `{{settings}}` or `{{actions}}` is filled with the reference generated from
   `data/mightty.json`, so it always matches the app.
 - `content/changelog.md`: the changelog, written by hand from the commits.
+- For search engines and agents, the generator also writes each page as
+  Markdown beside it (`index.md`), `llms.txt` and `llms-full.txt` at the
+  root, structured data (JSON-LD) in each page's head, and a sitemap dated
+  by each page's last commit (`src/agents.rs`).
 - `data/releases.json`: the releases on GitHub, with their dates, sizes and
   checksums, which the download page is built from. `scripts/sync.sh`
   refreshes it; run it after each release.
