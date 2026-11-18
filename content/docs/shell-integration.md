@@ -15,6 +15,9 @@ You don't need to set anything up or edit your dotfiles. Mightty starts your she
 - `mightty ctl run` and the MCP tool `run_command` return a command's output and exit code.
 - `mightty ctl commands` and the MCP tool `list_commands` list recent commands with their output.
 - New tabs and splits open in the folder your shell is in.
+- <kbd>⌘↑</kbd> and <kbd>⌘↓</kbd> scroll to the previous or next prompt.
+- Clicking in the command you're typing moves the cursor there, and <kbd>⌫</kbd> deletes the selected part of it.
+- A command that runs for a while marks its pane when it finishes, if you aren't looking at that pane.
 
 ## Marks can't be forged
 

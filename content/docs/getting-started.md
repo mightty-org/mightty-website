@@ -42,10 +42,15 @@ The keys you'll use most. Each is also in the menus and the command palette (<kb
 | <kbd>⌘F</kbd> | Search the pane, including its scrollback. |
 | <kbd>⌘G</kbd> <kbd>⌘⇧G</kbd> | Go to the next or previous match. |
 | <kbd>⌘K</kbd> | Clear the scrollback and the screen above the prompt. |
+| <kbd>⌘↑</kbd> <kbd>⌘↓</kbd> | Scroll to the previous or next prompt. |
 
 To select text, drag over it. Double-click selects a word and triple-click selects a line. Hold <kbd>⌥</kbd> while dragging to select a rectangle. Dragging past the top or bottom edge of the pane scrolls it.
 
 Hold <kbd>⌘</kbd> over a link to see where it goes, and <kbd>⌘</kbd>-click to open it.
+
+## Editing the command
+
+While you type a command at the prompt, click in it to move the cursor there. To delete part of it, select that part and press <kbd>⌫</kbd>. Both need [shell integration](/docs/shell-integration/), and the click can be turned off with `cursor-click-to-move`.
 
 ## Text size
 

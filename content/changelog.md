@@ -3,6 +3,26 @@ title: Changelog
 ---
 # Changelog
 
+## Version 0.3.0
+
+Released November 17, 2026. [Download Mightty 0.3.0](https://github.com/mightty-org/mightty/releases/download/v0.3.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.3.0) on GitHub.
+
+### Added
+
+- Clicking in the command being typed at a prompt moves the cursor there. `cursor-click-to-move` turns this off.
+- Delete and Forward Delete with part of the command selected delete that part.
+- A command that runs for 10 seconds or more marks its pane as needing you when it finishes, if you aren't looking at that pane, and posts a notification if you are in another app. The notification says whether the command succeeded and how long it took. `notify-on-command-finish` and `notify-on-command-finish-after` control this.
+- <kbd>⌘↑</kbd> and <kbd>⌘↓</kbd> scroll to the previous or next prompt, with the command and its output below it. The action is `jump_to_prompt`, and the command palette has both directions.
+
+### Changed
+
+- A tab is marked with ● when any of its panes needs you. Previously only the window title was.
+- Mightty asks for permission to show a count on its Dock icon along with permission for notifications, the first time a pane needs you. macOS hides the count without it.
+
+### Fixed
+
+- Jumping to a pane, with <kbd>⌘⇧A</kbd>, a notification or `mightty ctl focus`, shows its tab if the tab was hidden.
+
 ## Version 0.2.0
 
 Released November 12, 2026. [Download Mightty 0.2.0](https://github.com/mightty-org/mightty/releases/download/v0.2.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.2.0) on GitHub.

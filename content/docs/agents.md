@@ -17,10 +17,11 @@ A pane needs your attention when any of these happens:
 - An agent in it has been working and then goes quiet.
 - A program in it rings the bell.
 - A program in it asks for a notification, with OSC 9, OSC 777 or `mightty ctl notify`.
+- A command that ran for 10 seconds or more finishes. `notify-on-command-finish-after` sets the time, and `notify-on-command-finish = never` turns this off. Commands run with `mightty ctl run` or the MCP server don't count, since whoever ran them is waiting for the result.
 
 If you aren't looking at that pane, Mightty tells you in three places:
 
-- The pane gets an orange border, and the title of its window starts with ●.
+- The pane gets an orange border, and its tab and the title of its window start with ●.
 - The Dock icon shows the number of panes that need you. It bounces once if Mightty is in the background.
 - A notification appears if you are in another app.
 
