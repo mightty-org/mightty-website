@@ -38,6 +38,7 @@ Input methods are supported. The text being composed is drawn at the cursor.
 | OSC 50 | Set the font family of its pane. The settings screen uses this to preview fonts. |
 | OSC 22 | Set the shape of the mouse pointer. |
 | OSC 9;4 | Report progress, shown as a thin bar along the top of the pane. |
+| `CSI ? 996 n`, mode 2031 | Ask whether the theme is dark or light, and be told when it changes. |
 
 ## Clipboard and notifications
 
@@ -46,7 +47,17 @@ Input methods are supported. The text being composed is drawn at the cursor.
 
 ## Queries
 
-A program can ask for the cursor position, the terminal's name and version (XTVERSION), and whether a mode is on (DECRQM).
+A program can ask Mightty about itself and its state:
+
+| Sequence | What a program can ask |
+|---|---|
+| DSR, XTVERSION | The cursor position, and the terminal's name and version. |
+| DECRQM | Whether a mode is on. |
+| XTGETTCAP | Which terminfo capabilities Mightty supports, such as true colour (`RGB`, `Tc`), styled underlines (`Smulx`), the cursor shape (`Ss`) and synchronized output (`Sync`). Neovim uses this to detect true colour when `COLORTERM` isn't set. |
+| DECRQSS | The current text style (`m`), cursor shape (`SP q`) and scroll region (`r`). |
+| XTWINOPS 14, 16, 18 | The size of the text area and of a cell in pixels, and the size of the grid in cells. |
+
+A program that sets mode 2048 is sent the size in its input, as `CSI 48 ; rows ; columns ; height ; width t`, when it sets the mode and whenever the size changes. Full-screen programs get the new size in order with the keys typed, instead of only from a signal.
 
 ## Safety
 

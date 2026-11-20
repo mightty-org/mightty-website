@@ -46,11 +46,28 @@ The keys you'll use most. Each is also in the menus and the command palette (<kb
 
 To select text, drag over it. Double-click selects a word and triple-click selects a line. Hold <kbd>⌥</kbd> while dragging to select a rectangle. Dragging past the top or bottom edge of the pane scrolls it.
 
+A double-click selects a whole path or URL. To have it stop at other characters, such as `/`, list them in `selection-word-chars`.
+
+<kbd>⌘C</kbd> copies the selection with its colours and styles, so pasting into Notes, Mail or Slack keeps how it looked. Apps that paste plain text get plain text. `copy-with-colors = false` copies plain text only.
+
 Hold <kbd>⌘</kbd> over a link to see where it goes, and <kbd>⌘</kbd>-click to open it.
 
 ## Editing the command
 
-While you type a command at the prompt, click in it to move the cursor there. To delete part of it, select that part and press <kbd>⌫</kbd>. Both need [shell integration](/docs/shell-integration/), and the click can be turned off with `cursor-click-to-move`.
+The command you type at the prompt can be edited with the same keys as a Mac text field:
+
+| Key | Action |
+|---|---|
+| <kbd>⌘←</kbd> <kbd>⌘→</kbd> | Move to the start or end of the line. |
+| <kbd>⌥←</kbd> <kbd>⌥→</kbd> | Move back or forward by a word. |
+| <kbd>⌘⌫</kbd> <kbd>⌘⌦</kbd> | Delete to the start or end of the line. |
+| <kbd>⌥⌫</kbd> <kbd>⌥⌦</kbd> | Delete the previous or next word. |
+| <kbd>⇧←</kbd> <kbd>⇧→</kbd> | Select by character. Add <kbd>⌥</kbd> to select by word, or <kbd>⌘</kbd> to select to the start or end. |
+| <kbd>⌘X</kbd> | Cut the selected part of the command. |
+
+Click in the command to move the cursor there. With part of the command selected, with the mouse or the keyboard, typing or pasting replaces it and <kbd>⌫</kbd> deletes it.
+
+Clicking and editing a selection need [shell integration](/docs/shell-integration/). The click can be turned off with `cursor-click-to-move`.
 
 ## Text size
 
