@@ -6,7 +6,7 @@ order: 4
 ---
 # Key bindings
 
-Key bindings are set in the [config file](/docs/settings/#the-config-file) with `keybind` lines, in the same format Ghostty uses. Each line binds one key to one action:
+Key bindings are set in the [config file](/docs/settings/#the-config-file) with `keybind` lines. Each line binds one key to one action:
 
 ```
 keybind = cmd+shift+t=new_tab

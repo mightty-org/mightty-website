@@ -12,7 +12,7 @@ Released November 20, 2026. [Download Mightty 0.4.0](https://github.com/mightty-
 - The standard Mac text-editing keys work at the prompt. <kbd>⌘←</kbd> and <kbd>⌘→</kbd> move to the start or end of the line, <kbd>⌥←</kbd> and <kbd>⌥→</kbd> move by word, <kbd>⌘⌫</kbd> deletes to the start of the line, <kbd>⌘⌦</kbd> deletes to the end, and <kbd>⌥⌦</kbd> deletes the next word. They are default key bindings and can be changed.
 - The command being typed at a prompt can be edited like text in a text field. <kbd>⇧←</kbd> and <kbd>⇧→</kbd> select it by character, with <kbd>⌥</kbd> by word and with <kbd>⌘</kbd> to the start or end. Typing or pasting replaces the selection, and <kbd>⌘X</kbd> cuts it. The new `cut_to_clipboard` action is bound to <kbd>⌘X</kbd>.
 - Copied text also goes on the clipboard as HTML, with its colours, bold, italic, underlines and strikethrough. Apps that paste rich text, such as Notes, Mail and Slack, keep how the text looked, and apps that paste plain text still get plain text. `copy-with-colors` turns this off.
-- `selection-word-chars` sets which characters end a word when you double-click. It has the same meaning as Ghostty's setting of the same name.
+- `selection-word-chars` sets which characters end a word when you double-click.
 - Programs can ask whether the theme is dark or light (`CSI ? 996 n`), and be told when it changes (mode 2031).
 - Programs can be sent the window size as input whenever it changes (mode 2048), in order with the keys typed.
 - Programs can ask which terminal capabilities Mightty supports (XTGETTCAP) and read the current text style, cursor shape and scroll region (DECRQSS). Neovim, for example, now detects true colour without `COLORTERM` being set.
@@ -163,7 +163,7 @@ Version 0.1.0 was the first release. The sections below list what went into it, 
 
 ### Added
 
-- Key bindings with `keybind = TRIGGER=ACTION`, in Ghostty's format.
+- Key bindings with `keybind = TRIGGER=ACTION`.
 - Appearance settings: background opacity and blur, padding, cursor style and cell size.
 - Font settings: fallback fonts, separate bold and italic families, OpenType features and variable font axes.
 - Themes that follow the macOS light and dark appearance, and `config-file` for reading another file.

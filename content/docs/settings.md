@@ -45,7 +45,7 @@ Mightty checks the file once a second and applies it when it changes, so a chang
 
 Mightty → Open Config File opens the file in a new tab, in the editor named by `$VISUAL` or `$EDITOR`. It creates the file first if it doesn't exist.
 
-Settings use Ghostty's names wherever they mean the same thing, so many lines from a Ghostty config work unchanged. If Mightty doesn't understand a line, it reports the line number and applies the rest of the file.
+If Mightty doesn't understand a line, it reports the line number and applies the rest of the file.
 
 To split your settings across files, use `config-file = PATH`. Mightty reads that file at the point where the line appears.
 

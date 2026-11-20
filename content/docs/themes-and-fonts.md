@@ -24,7 +24,7 @@ theme = light:Catppuccin Latte,dark:Catppuccin Mocha
 
 ### Your own themes
 
-Put your own themes in `~/.config/mightty/themes/`, one file per theme. A theme file uses Ghostty's format and contains colour settings only. A theme of yours with the same name as a built-in theme replaces it.
+Put your own themes in `~/.config/mightty/themes/`, one file per theme. A theme file is written like the config file and contains colour settings only. A theme of yours with the same name as a built-in theme replaces it.
 
 To adjust a single colour of a theme, add the colour setting to your config after the `theme` line.
 
@@ -59,4 +59,4 @@ The icons used by shell prompts and file listings come from Symbols Nerd Font, w
 
 ### Character widths
 
-Character widths follow Unicode 17. An emoji written with a variation selector takes two cells, as it does in Ghostty and kitty. Some shells count such an emoji as one cell and then redraw the line incorrectly. If you see that, set `grapheme-width = legacy` and Mightty counts it as one cell too.
+Character widths follow Unicode 17. An emoji written with a variation selector takes two cells, as Unicode specifies. Some shells count such an emoji as one cell and then redraw the line incorrectly. If you see that, set `grapheme-width = legacy` and Mightty counts it as one cell too.
