@@ -3,6 +3,28 @@ title: Changelog
 ---
 # Changelog
 
+## Version 0.5.0
+
+Released November 23, 2026. [Download Mightty 0.5.0](https://github.com/mightty-org/mightty/releases/download/v0.5.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.5.0) on GitHub.
+
+### Added
+
+- Inline images sent with OSC 1337, as `imgcat` sends them, in PNG, JPEG, GIF, WebP, HEIC and HEIF. See [Protocols](/docs/protocols/#images).
+- Sixel images, from `img2sixel`, `chafa`, ImageMagick, gnuplot and other programs.
+- Tab colours. Right-click a tab and choose Tab Colour to mark it with a built-in colour, or choose New Colour… to name your own. `tab-color = Name=#hex` defines colours in the config file, and `set_tab_color` sets one from a key binding. See [Tabs and windows](/docs/tabs-and-windows/#tab-colours).
+- Hide Mightty (<kbd>⌘H</kbd>), Hide Others (<kbd>⌥⌘H</kbd>) and Show All in the Mightty menu, with the actions `hide`, `hide_others` and `show_all`.
+- Programs can ask whether their pane is visible (`CSI ? 998 n`), and be told when it changes (mode 2033), so they can pause what you can't see.
+- Soft reset (DECSTR), the cursor position report with its page (DECXCPR), and the screen size query (`CSI 19 t`).
+
+### Changed
+
+- Shells get `LANG` from your macOS language and region when Mightty is opened without one, as it is from the Dock or the Finder. Editors and pagers no longer show characters like ⌘ as bytes. A `LANG`, `LC_ALL` or `LC_CTYPE` you set yourself is kept.
+- Pressing <kbd>e</kbd> on the settings screen opens your editor straight away. It used to start an interactive shell first, which could take seconds.
+
+### Security
+
+- Image formats other than PNG are decoded by macOS in a separate, sandboxed process that can't open your files or reach the network, with limits on image size and decoding time.
+
 ## Version 0.4.0
 
 Released November 20, 2026. [Download Mightty 0.4.0](https://github.com/mightty-org/mightty/releases/download/v0.4.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.4.0) on GitHub.

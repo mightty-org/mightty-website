@@ -20,7 +20,27 @@ A window shows its tab bar when it has two or more tabs. With `macos-titlebar-st
 - **Move a tab to another window.** Drag it onto that window's tab bar.
 - **Merge two windows.** Drag one window by its title bar onto the tab bar of the other. All of its tabs move there.
 
-Right-click a tab for Rename Tab, Move Tab to New Window, Close Tab and Close Other Tabs.
+Right-click a tab for Rename Tab, Tab Colour, Move Tab to New Window, Close Tab and Close Other Tabs.
+
+## Tab colours
+
+Tab Colour marks a tab with a colour, which is blended into the tab's background. A coloured tab keeps its colour when Mightty restores your windows.
+
+There are seven built-in colours: Red, Orange, Yellow, Green, Blue, Purple and Gray. To add your own, choose New Colour…, pick a colour and give it a name, such as Prod. Mightty saves it to your config file as a `tab-color` line, and it is then offered for every tab. You can also write the lines yourself:
+
+```
+tab-color = Prod=#d0342c
+tab-color = Staging=#e8a33d
+```
+
+A name given again replaces that colour, and your colour can take a built-in colour's name to replace it. Names match in any case. Tabs refer to colours by name, so changing a colour's value recolours every tab marked with it.
+
+The command palette lists each colour as "Tab Colour: …". To set one with a key, bind `set_tab_color`:
+
+```
+keybind = cmd+shift+r=set_tab_color:Prod
+keybind = cmd+shift+0=set_tab_color:none
+```
 
 When there are more tabs than fit, the bar scrolls sideways and keeps the selected tab in view.
 
