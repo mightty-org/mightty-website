@@ -50,6 +50,8 @@ A double-click selects a whole path or URL. To have it stop at other characters,
 
 <kbd>⌘C</kbd> copies the selection with its colours and styles, so pasting into Notes, Mail or Slack keeps how it looked. Apps that paste plain text get plain text. `copy-with-colors = false` copies plain text only.
 
+Middle-click pastes the clipboard. When a program in the pane uses the mouse, such as vim with `mouse=a`, it gets the click instead; hold <kbd>⇧</kbd> to paste anyway. `mouse-middle-click-paste = false` turns this off.
+
 Hold <kbd>⌘</kbd> over a link to see where it goes, and <kbd>⌘</kbd>-click to open it.
 
 ## Editing the command

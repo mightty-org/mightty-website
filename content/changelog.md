@@ -3,6 +3,27 @@ title: Changelog
 ---
 # Changelog
 
+## Version 0.6.0
+
+Released November 24, 2026. [Download Mightty 0.6.0](https://github.com/mightty-org/mightty/releases/download/v0.6.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.6.0) on GitHub.
+
+### Added
+
+- A bar along the bottom of a pane whose program has ended and which stayed open. It says how the program ended, in red if it failed. Press <kbd>↩</kbd> or click the restart button to run the program again, or click the close button. See [Tabs and windows](/docs/tabs-and-windows/#when-a-program-ends).
+- `close-on-exit` sets whether a pane closes when its program ends: `success` (the default), `always` or `never`.
+- Middle-click a tab to close it.
+- Middle-click in a pane to paste the clipboard. A program using the mouse, such as vim with `mouse=a`, gets the middle button instead; hold <kbd>⇧</kbd> to paste anyway. `mouse-middle-click-paste = false` turns this off.
+- Mightty can open `.command` files, programs and shell scripts in a new window, a folder dropped on its Dock icon in a shell, and `ssh://` links. Mightty → Make Mightty the Default Terminal (`make_default_terminal`) makes it the default for `.command` files, programs and `ssh://` links. See [Tabs and windows](/docs/tabs-and-windows/#opening-scripts-and-links-with-mightty).
+
+### Changed
+
+- A pane whose program fails, or is ended by a signal, now stays open with its output, instead of closing. `close-on-exit = always` closes it as before.
+
+### Security
+
+- A script or program downloaded from the Internet asks before it runs when opened with Mightty.
+- `ssh://` links are accepted only with a plain user, host and port, so a link can't pass options to `ssh`. Opened files whose path contains a backslash or control character are refused.
+
 ## Version 0.5.0
 
 Released November 23, 2026. [Download Mightty 0.5.0](https://github.com/mightty-org/mightty/releases/download/v0.5.0/Mightty.dmg), or read the [release notes](https://github.com/mightty-org/mightty/releases/tag/v0.5.0) on GitHub.
